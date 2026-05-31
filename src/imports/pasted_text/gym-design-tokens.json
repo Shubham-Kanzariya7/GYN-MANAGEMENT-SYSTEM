@@ -1,0 +1,230 @@
+{
+  "project_name": "Gym Management System",
+  "design_style": {
+    "theme": "Modern Dark Fitness UI",
+    "primary_color": "#FF6B00",
+    "secondary_color": "#111827",
+    "accent_color": "#22C55E",
+    "background_color": "#0F172A",
+    "card_color": "#1E293B",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#94A3B8",
+    "border_radius": "16px",
+    "font_family": "Poppins",
+    "layout_style": "Minimal Modern Dashboard",
+    "animations": true,
+    "responsive": true
+  },
+  "pages": [
+    {
+      "name": "Login Page",
+      "description": "Modern gym-themed login screen with background fitness image overlay",
+      "components": [
+        "Logo",
+        "Email Input",
+        "Password Input",
+        "Remember Me Checkbox",
+        "Forgot Password Link",
+        "Login Button",
+        "Register Redirect",
+        "Animated Hero Section"
+      ],
+      "ui_notes": [
+        "Split screen layout",
+        "Glassmorphism login card",
+        "Dark overlay with orange gradient highlights"
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "description": "Central analytics dashboard for gym owner/admin",
+      "components": [
+        "Sidebar Navigation",
+        "Top Navbar",
+        "Statistics Cards",
+        "Revenue Chart",
+        "Attendance Graph",
+        "Recent Payments Table",
+        "Membership Expiry Alerts",
+        "Quick Actions Panel"
+      ],
+      "stats_cards": [
+        "Total Members",
+        "Active Memberships",
+        "Total Revenue",
+        "Today's Attendance"
+      ],
+      "ui_notes": [
+        "Use cards with hover animation",
+        "Charts using gradient colors",
+        "Modern admin dashboard inspired by SaaS products"
+      ]
+    },
+    {
+      "name": "Member Management Page",
+      "description": "Manage all gym members",
+      "components": [
+        "Search Bar",
+        "Filter Dropdown",
+        "Members Table",
+        "Add Member Button",
+        "Edit/Delete Actions",
+        "Pagination",
+        "Membership Status Badge"
+      ],
+      "table_columns": [
+        "Profile",
+        "Name",
+        "Email",
+        "Phone",
+        "Plan",
+        "Expiry Date",
+        "Status",
+        "Actions"
+      ]
+    },
+    {
+      "name": "Membership Plans Page",
+      "description": "Display and manage membership plans",
+      "components": [
+        "Pricing Cards",
+        "Add Plan Modal",
+        "Plan Features List",
+        "Duration Badge",
+        "Pricing Highlight",
+        "CTA Buttons"
+      ],
+      "ui_notes": [
+        "Modern pricing cards",
+        "Highlighted recommended plan",
+        "Animated hover effects"
+      ]
+    },
+    {
+      "name": "Attendance Management",
+      "description": "Track member attendance",
+      "components": [
+        "Attendance Table",
+        "QR Scan Section",
+        "Manual Check-in Button",
+        "Date Filter",
+        "Attendance Analytics"
+      ],
+      "ui_notes": [
+        "Green-red status indicators",
+        "Real-time attendance counter"
+      ]
+    },
+    {
+      "name": "Payment Management",
+      "description": "Manage gym payments and invoices",
+      "components": [
+        "Payment History Table",
+        "Invoice Download Button",
+        "Pending Dues Alert",
+        "Payment Status Badge",
+        "Transaction Filters"
+      ],
+      "table_columns": [
+        "Member",
+        "Amount",
+        "Payment Date",
+        "Method",
+        "Status"
+      ]
+    },
+    {
+      "name": "Trainer Management",
+      "description": "Manage trainers and schedules",
+      "components": [
+        "Trainer Cards",
+        "Assigned Members List",
+        "Schedule Calendar",
+        "Salary Information",
+        "Specialization Tags"
+      ]
+    },
+    {
+      "name": "Workout & Diet Plans",
+      "description": "Assign workout and diet plans to members",
+      "components": [
+        "Workout Cards",
+        "Diet Schedule",
+        "Progress Tracker",
+        "Exercise Categories",
+        "Trainer Notes"
+      ],
+      "ui_notes": [
+        "Fitness-app inspired UI",
+        "Progress bars and charts"
+      ]
+    },
+    {
+      "name": "Profile Settings",
+      "description": "User profile and account settings",
+      "components": [
+        "Profile Image Upload",
+        "Personal Information Form",
+        "Password Change",
+        "Notification Settings",
+        "Theme Toggle"
+      ]
+    }
+  ],
+  "navigation": {
+    "sidebar_items": [
+      "Dashboard",
+      "Members",
+      "Attendance",
+      "Payments",
+      "Membership Plans",
+      "Trainers",
+      "Workout Plans",
+      "Reports",
+      "Settings",
+      "Logout"
+    ],
+    "sidebar_style": "Collapsible dark sidebar with icons"
+  },
+  "charts_and_graphs": [
+    {
+      "type": "Line Chart",
+      "purpose": "Monthly Revenue Analytics"
+    },
+    {
+      "type": "Bar Chart",
+      "purpose": "Attendance Statistics"
+    },
+    {
+      "type": "Pie Chart",
+      "purpose": "Membership Plan Distribution"
+    }
+  ],
+  "recommended_figma_plugins": [
+    "Iconify",
+    "Charts",
+    "Content Reel",
+    "Blush",
+    "Autoflow"
+  ],
+  "design_inspirations": [
+    "Modern SaaS Dashboard",
+    "Fitness Mobile Apps",
+    "Gym CRM Systems",
+    "Glassmorphism UI",
+    "Neumorphism Cards"
+  ],
+  "responsive_design": {
+    "mobile": true,
+    "tablet": true,
+    "desktop": true
+  },
+  "extra_features_ui": [
+    "Dark/Light Mode",
+    "Animated Statistics",
+    "Toast Notifications",
+    "Real-time Updates",
+    "AI Workout Recommendation Section",
+    "BMI Calculator Widget"
+  ]
+}
