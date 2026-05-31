@@ -5,6 +5,11 @@ export async function login(email, password) {
   return response.data;
 }
 
+export async function signup(userData) {
+  const response = await apiClient.post('/auth/signup', userData);
+  return response.data;
+}
+
 export function saveAuthData(data) {
   localStorage.setItem('gym_access_token', data.token);
   localStorage.setItem('gym_user', JSON.stringify({ id: data.id, fullName: data.fullName, email: data.email, role: data.role }));

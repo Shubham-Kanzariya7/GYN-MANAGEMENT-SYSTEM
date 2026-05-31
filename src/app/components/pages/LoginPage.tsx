@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { Dumbbell, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { login, saveAuthData } from '../../../api/authService';
 
@@ -130,9 +130,9 @@ export function LoginPage() {
             {/* Register Link */}
             <p className="text-center text-sm text-muted-foreground mt-6">
               Don't have an account?{' '}
-              <a href="#" className="text-primary hover:text-primary/80 font-medium transition-colors">
+              <Link to="/signup" className="text-primary hover:text-primary/80 font-medium transition-colors">
                 Register
-              </a>
+              </Link>
             </p>
           </div>
         </div>

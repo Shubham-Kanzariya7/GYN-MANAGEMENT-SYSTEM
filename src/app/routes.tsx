@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { DashboardLayout } from "./components/DashboardLayout";
 import { LoginPage } from "./components/pages/LoginPage";
+import { SignUpPage } from "./components/pages/SignUpPage";
 import { Dashboard } from "./components/pages/Dashboard";
 import { Members } from "./components/pages/Members";
 import { MembershipPlans } from "./components/pages/MembershipPlans";
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     Component: LoginPage,
+  },
+  {
+    path: "/signup",
+    Component: SignUpPage,
   },
   {
     path: "/",
