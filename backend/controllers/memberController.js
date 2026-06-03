@@ -1,31 +1,7 @@
-import db from '../config/db.js';
+import { Op } from 'sequelize';
+import db from '../models/index.js';
 
-function runQuery(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve(this);
-    });
-  });
-}
-
-function allQuery(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
-}
-
-function getQuery(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
-}
+const { Member, Trainer, MembershipPlan } = db;
 
 export async function addMember(req, res, next) {
   try {
@@ -36,40 +12,43 @@ export async function addMember(req, res, next) {
       gender,
       dob,
       address,
-      membershipPlan,
-      joiningDate,
-      expiryDate,
       height,
       weight,
       status,
       trainerId,
+      membershipPlanId,
+      joiningDate,
+      expiryDate,
+      notes,
     } = req.body;
 
     const photo = req.file ? req.file.filename : null;
+    const member = await Member.create({
+      fullName,
+      email,
+      phone,
+      gender,
+      dob,
+      address,
+      height: height || null,
+      weight: weight || null,
+      status: status || 'active',
+      trainerId: trainerId || null,
+      membershipPlanId: membershipPlanId || null,
+      joiningDate: joiningDate || null,
+      expiryDate: expiryDate || null,
+      photo,
+      notes,
+    });
 
-    const result = await runQuery(
-      `INSERT INTO members (fullName, email, phone, gender, dob, address, membershipPlan, joiningDate, expiryDate, height, weight, photo, status, trainerId)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        fullName,
-        email,
-        phone,
-        gender,
-        dob,
-        address,
-        membershipPlan,
-        joiningDate,
-        expiryDate,
-        height || null,
-        weight || null,
-        photo,
-        status || 'active',
-        trainerId || null,
-      ]
-    );
+    const newMember = await Member.findByPk(member.id, {
+      include: [
+        { model: Trainer, as: 'trainerProfile' },
+        { model: MembershipPlan, as: 'membershipPlan' },
+      ],
+    });
 
-    const member = await getQuery('SELECT * FROM members WHERE id = ?', [result.lastID]);
-    res.status(201).json({ success: true, message: 'Member added successfully', data: member });
+    res.status(201).json({ success: true, message: 'Member added successfully', data: newMember });
   } catch (error) {
     next(error);
   }
@@ -78,12 +57,12 @@ export async function addMember(req, res, next) {
 export async function updateMember(req, res, next) {
   try {
     const { id } = req.params;
-    const existing = await getQuery('SELECT * FROM members WHERE id = ?', [id]);
-    if (!existing) {
+    const member = await Member.findByPk(id);
+    if (!member) {
       return res.status(404).json({ success: false, message: 'Member not found' });
     }
 
-    const photo = req.file ? req.file.filename : existing.photo;
+    const photo = req.file ? req.file.filename : member.photo;
     const {
       fullName,
       email,
@@ -91,37 +70,42 @@ export async function updateMember(req, res, next) {
       gender,
       dob,
       address,
-      membershipPlan,
-      joiningDate,
-      expiryDate,
       height,
       weight,
       status,
       trainerId,
+      membershipPlanId,
+      joiningDate,
+      expiryDate,
+      notes,
     } = req.body;
 
-    await runQuery(
-      `UPDATE members SET fullName = ?, email = ?, phone = ?, gender = ?, dob = ?, address = ?, membershipPlan = ?, joiningDate = ?, expiryDate = ?, height = ?, weight = ?, photo = ?, status = ?, trainerId = ? WHERE id = ?`,
-      [
-        fullName || existing.fullName,
-        email || existing.email,
-        phone || existing.phone,
-        gender || existing.gender,
-        dob || existing.dob,
-        address || existing.address,
-        membershipPlan || existing.membershipPlan,
-        joiningDate || existing.joiningDate,
-        expiryDate || existing.expiryDate,
-        height || existing.height,
-        weight || existing.weight,
-        photo,
-        status || existing.status,
-        trainerId || existing.trainerId,
-        id,
-      ]
-    );
+    await member.update({
+      fullName: fullName || member.fullName,
+      email: email || member.email,
+      phone: phone || member.phone,
+      gender: gender || member.gender,
+      dob: dob || member.dob,
+      address: address || member.address,
+      height: height || member.height,
+      weight: weight || member.weight,
+      status: status || member.status,
+      trainerId: trainerId !== undefined ? trainerId : member.trainerId,
+      membershipPlanId:
+        membershipPlanId !== undefined ? membershipPlanId : member.membershipPlanId,
+      joiningDate: joiningDate || member.joiningDate,
+      expiryDate: expiryDate || member.expiryDate,
+      photo,
+      notes: notes || member.notes,
+    });
 
-    const updatedMember = await getQuery('SELECT * FROM members WHERE id = ?', [id]);
+    const updatedMember = await Member.findByPk(id, {
+      include: [
+        { model: Trainer, as: 'trainerProfile' },
+        { model: MembershipPlan, as: 'membershipPlan' },
+      ],
+    });
+
     res.json({ success: true, message: 'Member updated successfully', data: updatedMember });
   } catch (error) {
     next(error);
@@ -131,12 +115,12 @@ export async function updateMember(req, res, next) {
 export async function deleteMember(req, res, next) {
   try {
     const { id } = req.params;
-    const existing = await getQuery('SELECT * FROM members WHERE id = ?', [id]);
-    if (!existing) {
+    const member = await Member.findByPk(id);
+    if (!member) {
       return res.status(404).json({ success: false, message: 'Member not found' });
     }
 
-    await runQuery('DELETE FROM members WHERE id = ?', [id]);
+    await member.destroy();
     res.json({ success: true, message: 'Member deleted successfully' });
   } catch (error) {
     next(error);
@@ -146,7 +130,12 @@ export async function deleteMember(req, res, next) {
 export async function getMemberById(req, res, next) {
   try {
     const { id } = req.params;
-    const member = await getQuery('SELECT * FROM members WHERE id = ?', [id]);
+    const member = await Member.findByPk(id, {
+      include: [
+        { model: Trainer, as: 'trainerProfile' },
+        { model: MembershipPlan, as: 'membershipPlan' },
+      ],
+    });
     if (!member) {
       return res.status(404).json({ success: false, message: 'Member not found' });
     }
@@ -158,7 +147,13 @@ export async function getMemberById(req, res, next) {
 
 export async function getAllMembers(req, res, next) {
   try {
-    const members = await allQuery('SELECT * FROM members ORDER BY createdAt DESC');
+    const members = await Member.findAll({
+      include: [
+        { model: Trainer, as: 'trainerProfile' },
+        { model: MembershipPlan, as: 'membershipPlan' },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
     res.json({ success: true, message: 'Members retrieved successfully', data: members });
   } catch (error) {
     next(error);
@@ -171,11 +166,16 @@ export async function searchMembers(req, res, next) {
     if (!q) {
       return res.status(400).json({ success: false, message: 'Search query is required' });
     }
-    const query = `%${q}%`;
-    const members = await allQuery(
-      `SELECT * FROM members WHERE fullName LIKE ? OR email LIKE ? OR phone LIKE ? ORDER BY createdAt DESC`,
-      [query, query, query]
-    );
+    const members = await Member.findAll({
+      where: {
+        [Op.or]: [
+          { fullName: { [Op.like]: `%${q}%` } },
+          { email: { [Op.like]: `%${q}%` } },
+          { phone: { [Op.like]: `%${q}%` } },
+        ],
+      },
+      order: [['createdAt', 'DESC']],
+    });
     res.json({ success: true, message: 'Search results returned', data: members });
   } catch (error) {
     next(error);
@@ -185,10 +185,14 @@ export async function searchMembers(req, res, next) {
 export async function getExpiringMembers(req, res, next) {
   try {
     const today = new Date().toISOString().split('T')[0];
-    const members = await allQuery(
-      'SELECT * FROM members WHERE expiryDate <= ? ORDER BY expiryDate ASC',
-      [today]
-    );
+    const members = await Member.findAll({
+      where: {
+        expiryDate: {
+          [Op.lte]: today,
+        },
+      },
+      order: [['expiryDate', 'ASC']],
+    });
     res.json({ success: true, message: 'Expiring memberships returned', data: members });
   } catch (error) {
     next(error);

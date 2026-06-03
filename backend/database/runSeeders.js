@@ -4,14 +4,16 @@ import seedInitialData from './seeders/seedInitialData.js';
 
 dotenv.config();
 
-export async function initDatabase() {
+async function run() {
   try {
     await db.sequelize.authenticate();
-    await db.sequelize.sync({ alter: true });
     await seedInitialData(db);
-    console.log('Database initialization complete.');
+    console.log('Seed data inserted successfully.');
+    process.exit(0);
   } catch (error) {
-    console.error('Database initialization failed:', error);
-    throw error;
+    console.error('Seeder failed:', error);
+    process.exit(1);
   }
 }
+
+run();

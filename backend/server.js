@@ -8,6 +8,15 @@ import dotenv from 'dotenv';
 import { initDatabase } from './database/initDb.js';
 import authRoutes from './routes/authRoutes.js';
 import memberRoutes from './routes/memberRoutes.js';
+import trainerRoutes from './routes/trainerRoutes.js';
+import planRoutes from './routes/planRoutes.js';
+import membershipRoutes from './routes/membershipRoutes.js';
+import attendanceRoutes from './routes/attendanceRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import workoutRoutes from './routes/workoutRoutes.js';
+import dietRoutes from './routes/dietRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -45,6 +54,15 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/members', memberRoutes);
+app.use('/api/trainers', trainerRoutes);
+app.use('/api/membership-plans', planRoutes);
+app.use('/api/memberships', membershipRoutes);
+app.use('/api/attendance', attendanceRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/workouts', workoutRoutes);
+app.use('/api/diets', dietRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Gym backend is running' });
